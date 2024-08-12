@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 public class ProductComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productCommentId;
+    private Integer productCommentId;
 
     private String comment;
     @CreationTimestamp

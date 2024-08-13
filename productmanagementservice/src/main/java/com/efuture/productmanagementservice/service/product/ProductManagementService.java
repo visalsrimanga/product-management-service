@@ -48,24 +48,22 @@ public class ProductManagementService implements ProductManagementInterface {
     @Transactional
     public ResponseEntity<CommonResponse> updateProduct(UpdateProductRequest updateProductRequest) {
         try{
-//            Product product = new Product();
-//            product.setProductId(updateProductRequest.getProductId());
-//            product.setName(updateProductRequest.getName());
-//            product.setDescription(updateProductRequest.getDescription());
-//            product.setPrice(updateProductRequest.getPrice());
-//            productRepository.save(product);
             productRepository.updateProduct(updateProductRequest.getProductId(), updateProductRequest.getName(), updateProductRequest.getDescription(), updateProductRequest.getPrice());
             return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse("success"));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(Constants.ERROR));
         }
-
     }
 
     @Override
     @Transactional
     public ResponseEntity<CommonResponse> deleteProduct(String productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse("success"));
+        try{
+            productRepository.deleteProduct(productId);
+            return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse("success"));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(Constants.ERROR));
+        }
     }
 
     @Override

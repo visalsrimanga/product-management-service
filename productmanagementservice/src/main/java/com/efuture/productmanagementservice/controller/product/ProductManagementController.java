@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +32,7 @@ public class ProductManagementController extends BaseController {
         return productManagementInterface.createProduct(createProductRequest);
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<CommonResponse> updateProduct(@Valid @RequestBody UpdateProductRequest updateProductRequest, HttpServletRequest httpServletRequest) {
         return productManagementInterface.updateProduct(updateProductRequest);
     }

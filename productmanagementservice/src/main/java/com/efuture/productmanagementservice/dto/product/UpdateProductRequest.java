@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProductRequest {
-    private String productId;
+    private Integer productId;
     private String name;
     private String description;
     private BigDecimal price;

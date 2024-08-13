@@ -31,7 +31,7 @@ public class Product {
     @JoinColumn(name = "product_category_id", nullable = false)
     private ProductCategory productCategory;
 
-    private char status;
+    private Character status;
 
     @Temporal(TemporalType.DATE)
     private Date launchDate;

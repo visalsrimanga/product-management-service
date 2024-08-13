@@ -1,10 +1,10 @@
 package com.efuture.productmanagementservice.controller.product;
 
 import com.efuture.productmanagementservice.controller.BaseController;
-import com.efuture.productmanagementservice.dto.product.CommonResponse;
-import com.efuture.productmanagementservice.dto.product.CreateProductRequest;
-import com.efuture.productmanagementservice.dto.product.RetrieveProductResponse;
-import com.efuture.productmanagementservice.dto.product.UpdateProductRequest;
+import com.efuture.productmanagementservice.dto.CommonResponse;
+import com.efuture.productmanagementservice.dto.CreateProductRequest;
+import com.efuture.productmanagementservice.dto.RetrieveProductResponse;
+import com.efuture.productmanagementservice.dto.UpdateProductRequest;
 import com.efuture.productmanagementservice.serviceinterface.product.ProductManagementInterface;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -48,7 +48,7 @@ public class ProductManagementController extends BaseController {
     }
 
     @GetMapping("/get-premium-product")
-    public ResponseEntity<RetrieveProductResponse> getPremiumProducts(@RequestParam String price, HttpServletRequest httpServletRequest) {
-        return productManagementInterface.getPremiumProducts(price);
+    public ResponseEntity<RetrieveProductResponse> getPremiumProducts(HttpServletRequest httpServletRequest) {
+        return productManagementInterface.getPremiumProducts();
     }
 }

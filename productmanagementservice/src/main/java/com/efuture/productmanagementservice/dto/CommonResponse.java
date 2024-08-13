@@ -1,4 +1,4 @@
-package com.efuture.productmanagementservice.dto.product;
+package com.efuture.productmanagementservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

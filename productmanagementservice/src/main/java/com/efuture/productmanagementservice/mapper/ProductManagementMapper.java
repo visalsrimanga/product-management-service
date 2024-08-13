@@ -1,6 +1,6 @@
 package com.efuture.productmanagementservice.mapper;
 
-import com.efuture.productmanagementservice.dto.product.CreateProductRequest;
+import com.efuture.productmanagementservice.dto.CreateProductRequest;
 import com.efuture.productmanagementservice.model.Product;
 import com.efuture.productmanagementservice.model.ProductCategory;
 import org.springframework.stereotype.Component;

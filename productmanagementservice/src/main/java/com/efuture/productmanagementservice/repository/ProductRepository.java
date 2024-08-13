@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Transactional
@@ -28,4 +29,38 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                     "where product_id = :productId"
     )
     void deleteProduct(String productId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select\n" +
+                    "    p.name,\n" +
+                    "    p.description,\n" +
+                    "    p.price,\n" +
+                    "    pc.name as product_category,\n" +
+                    "    GROUP_CONCAT(pcmt.comment order by pcmt.created_at asc separator ';') as product_comments\n" +
+                    "from product p\n" +
+                    "inner join product_category pc on pc.product_category_id = p.product_category_id\n" +
+                    "left join product_comment pcmt on pcmt.product_id = p.product_id\n" +
+                    "where pc.name = :productCategory\n" +
+                    "group by\n" +
+                    "p.product_id, p.name, p.description, p.price, pc.name"
+    )
+    List<Object[]> getProductListByCategory(String productCategory);
+
+    @Query(
+            nativeQuery = true,
+            value = "select\n" +
+                    "    p.name,\n" +
+                    "    p.description,\n" +
+                    "    p.price,\n" +
+                    "    pc.name as product_category,\n" +
+                    "    GROUP_CONCAT(pcmt.comment order by pcmt.created_at asc separator ';') as product_comments\n" +
+                    "from product p\n" +
+                    "inner join product_category pc on pc.product_category_id = p.product_category_id\n" +
+                    "left join product_comment pcmt on pcmt.product_id = p.product_id\n" +
+                    "where p.price >= 500\n" +
+                    "group by\n" +
+                    "p.product_id, p.name, p.description, p.price, pc.name"
+    )
+    List<Object[]> getPremiumProducts();
 }

@@ -1,9 +1,9 @@
 package com.efuture.productmanagementservice.serviceinterface.product;
 
-import com.efuture.productmanagementservice.dto.product.CommonResponse;
-import com.efuture.productmanagementservice.dto.product.CreateProductRequest;
-import com.efuture.productmanagementservice.dto.product.RetrieveProductResponse;
-import com.efuture.productmanagementservice.dto.product.UpdateProductRequest;
+import com.efuture.productmanagementservice.dto.CommonResponse;
+import com.efuture.productmanagementservice.dto.CreateProductRequest;
+import com.efuture.productmanagementservice.dto.RetrieveProductResponse;
+import com.efuture.productmanagementservice.dto.UpdateProductRequest;
 import org.springframework.http.ResponseEntity;
 
 
@@ -16,5 +16,5 @@ public interface ProductManagementInterface {
 
     ResponseEntity<RetrieveProductResponse> getProductsByCategory(String productCategory);
 
-    ResponseEntity<RetrieveProductResponse> getPremiumProducts(String price);
+    ResponseEntity<RetrieveProductResponse> getPremiumProducts();
 }

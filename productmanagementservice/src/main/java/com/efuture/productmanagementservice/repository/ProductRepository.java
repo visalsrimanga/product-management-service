@@ -58,9 +58,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                     "from product p\n" +
                     "inner join product_category pc on pc.product_category_id = p.product_category_id\n" +
                     "left join product_comment pcmt on pcmt.product_id = p.product_id\n" +
-                    "where p.price >= 500\n" +
+                    "where p.price >= :premiumProductMinPrice\n" +
                     "group by\n" +
                     "p.product_id, p.name, p.description, p.price, pc.name"
     )
-    List<Object[]> getPremiumProducts();
+    List<Object[]> getPremiumProducts(BigDecimal premiumProductMinPrice);
 }

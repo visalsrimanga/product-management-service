@@ -1,4 +1,4 @@
-package com.efuture.productmanagementservice.serviceinterface.product;
+package com.efuture.productmanagementservice.serviceinterface;
 
 import com.efuture.productmanagementservice.dto.CommonResponse;
 import com.efuture.productmanagementservice.dto.CreateProductRequest;

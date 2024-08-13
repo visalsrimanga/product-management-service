@@ -1,13 +1,11 @@
-package com.efuture.productmanagementservice.controller.product;
+package com.efuture.productmanagementservice.controller;
 
-import com.efuture.productmanagementservice.controller.BaseController;
 import com.efuture.productmanagementservice.dto.CommonResponse;
 import com.efuture.productmanagementservice.dto.CreateProductRequest;
 import com.efuture.productmanagementservice.dto.RetrieveProductResponse;
 import com.efuture.productmanagementservice.dto.UpdateProductRequest;
-import com.efuture.productmanagementservice.serviceinterface.product.ProductManagementInterface;
+import com.efuture.productmanagementservice.serviceinterface.ProductManagementInterface;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,17 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/pms/product")
-public class ProductManagementController extends BaseController {
+public class ProductManagementController {
     @Autowired
     ProductManagementInterface productManagementInterface;
 
     @PostMapping("/create")
-    public ResponseEntity<CommonResponse> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<CommonResponse> createProduct(@RequestBody CreateProductRequest createProductRequest, HttpServletRequest httpServletRequest) {
         return productManagementInterface.createProduct(createProductRequest);
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<CommonResponse> updateProduct(@Valid @RequestBody UpdateProductRequest updateProductRequest, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<CommonResponse> updateProduct(@RequestBody UpdateProductRequest updateProductRequest, HttpServletRequest httpServletRequest) {
         return productManagementInterface.updateProduct(updateProductRequest);
     }
 

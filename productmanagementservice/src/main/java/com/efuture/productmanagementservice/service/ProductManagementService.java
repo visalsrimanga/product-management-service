@@ -1,4 +1,4 @@
-package com.efuture.productmanagementservice.service.product;
+package com.efuture.productmanagementservice.service;
 
 import com.efuture.productmanagementservice.dto.ProductData;
 import com.efuture.productmanagementservice.dto.CommonResponse;
@@ -9,9 +9,12 @@ import com.efuture.productmanagementservice.mapper.ProductManagementMapper;
 import com.efuture.productmanagementservice.model.ProductCategory;
 import com.efuture.productmanagementservice.repository.ProductCategoryRepository;
 import com.efuture.productmanagementservice.repository.ProductRepository;
-import com.efuture.productmanagementservice.serviceinterface.product.ProductManagementInterface;
-import com.efuture.productmanagementservice.util.constant.Constants;
+import com.efuture.productmanagementservice.serviceinterface.ProductManagementInterface;
+import com.efuture.productmanagementservice.util.BaseException;
+import com.efuture.productmanagementservice.util.DtoValidator;
+import com.efuture.productmanagementservice.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,12 +35,17 @@ public class ProductManagementService implements ProductManagementInterface {
     ProductRepository productRepository;
     @Autowired
     ProductCategoryRepository productCategoryRepository;
+    @Autowired
+    DtoValidator dtoValidator;
+    @Value("${premium.product.min.price}")
+    private BigDecimal premiumProductMinPrice;
 
 
     @Override
     @Transactional
     public ResponseEntity<CommonResponse> createProduct(CreateProductRequest createProductRequest) {
         try {
+            dtoValidator.validateRequestDto(createProductRequest);
             ProductCategory productCategory = productCategoryRepository.findProductCategory(createProductRequest.getCategory());
             if (productCategory == null){
                 ProductCategory productCategoryNew = new ProductCategory();
@@ -46,6 +54,8 @@ public class ProductManagementService implements ProductManagementInterface {
             }
             productRepository.save(productManagementMapper.mapProduct(createProductRequest, productCategory));
             return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponse(Constants.SUCCESS));
+        } catch (BaseException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponse(Constants.VALIDATION_FAILURE, ex.getMessage()));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(Constants.ERROR));
         }
@@ -55,8 +65,11 @@ public class ProductManagementService implements ProductManagementInterface {
     @Transactional
     public ResponseEntity<CommonResponse> updateProduct(UpdateProductRequest updateProductRequest) {
         try{
+            dtoValidator.validateRequestDto(updateProductRequest);
             productRepository.updateProduct(updateProductRequest.getProductId(), updateProductRequest.getName(), updateProductRequest.getDescription(), updateProductRequest.getPrice());
             return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse(Constants.SUCCESS));
+        } catch (BaseException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponse(Constants.VALIDATION_FAILURE, ex.getMessage()));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(Constants.ERROR));
         }
@@ -66,6 +79,8 @@ public class ProductManagementService implements ProductManagementInterface {
     @Transactional
     public ResponseEntity<CommonResponse> deleteProduct(String productId) {
         try{
+            if(productId == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponse(Constants.VALIDATION_FAILURE, "productId cannot be null"));
             productRepository.deleteProduct(productId);
             return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse(Constants.SUCCESS));
         } catch (Exception e){
@@ -76,6 +91,8 @@ public class ProductManagementService implements ProductManagementInterface {
     @Override
     public ResponseEntity<RetrieveProductResponse> getProductsByCategory(String productCategory) {
         try{
+            if (productCategory == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RetrieveProductResponse(null, Constants.VALIDATION_FAILURE));
             List<Object[]> results = productRepository.getProductListByCategory(productCategory);
             List<ProductData> productDataList = results.stream().map(this::mapToProductData).collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(new RetrieveProductResponse(productDataList, Constants.SUCCESS));
@@ -97,7 +114,7 @@ public class ProductManagementService implements ProductManagementInterface {
     @Override
     public ResponseEntity<RetrieveProductResponse> getPremiumProducts() {
         try{
-            List<Object[]> results = productRepository.getPremiumProducts();
+            List<Object[]> results = productRepository.getPremiumProducts(premiumProductMinPrice);
             List<ProductData> productDataList = results.stream().map(this::mapToProductData).collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(new RetrieveProductResponse(productDataList, Constants.SUCCESS));
         } catch (Exception e){

@@ -1,4 +1,4 @@
-package com.efuture.productmanagementservice.util.constant;
+package com.efuture.productmanagementservice.util;
 
 
 public class Constants {
